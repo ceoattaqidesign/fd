@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="id" class="h-full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis-in - Platform Kuis Interaktif</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="/_sdk/data_sdk.js"></script>
+<script src="/_sdk/element_sdk.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"> 
+<style>@view-transition { navigation: auto; }</style>
+</head>
+<body class="h-full"><nav class="fixed top-0 left-0 right-0 z-50 glass">
+<div class="container-responsive">
+<div class="flex items-center justify-between py-4"><div class="flex items-center space-x-3">
+<div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center hover-lift"><span class="text-white font-bold text-lg">Q</span>
+</div><span id="app-title" class="text-xl font-bold text-gray-900 hidden sm:block">Kuis-in</span>
+</div><div class="hidden md:flex items-center space-x-8"><a href="#" onclick="showPage('home')" class="nav-link text-white hover:text-gray-200 font-medium transition-colors">Beranda</a> <a href="#" onclick="showPage('quiz')" class="nav-link text-white hover:text-gray-200 font-medium transition-colors">Kuis</a> <a href="#" onclick="showPage('leaderboard')" class="nav-link text-white hover:text-gray-200 font-medium transition-colors">Leaderboard</a> <a href="#" onclick="showPage('help')" class="nav-link text-white hover:text-gray-200 font-medium transition-colors">Bantuan</a>
+</div><div class="hidden md:flex items-center space-x-4"><button onclick="showPage('login')" class="btn btn-secondary">Masuk</button> <button onclick="showPage('register')" class="btn btn-primary">Daftar</button>
+</div><button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+</svg></button>
+</div>
+</div><div id="mobile-menu" class="mobile-menu md:hidden fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-50">
+<div class="p-6">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"><span class="text-white font-bold text-sm">Q</span>
+</div><span class="text-lg font-bold text-gray-900">Kuis-in</span>
+</div><button id="close-mobile-menu" class="p-2 rounded-lg hover:bg-gray-100">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+</svg></button>
+</div>
+<nav class="space-y-4"><a href="#" onclick="showPage('home')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors"> 🏠 Beranda</a> <a href="#" onclick="showPage('quiz')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors"> 🧠 Kuis</a> <a href="#" onclick="showPage('leaderboard')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors"> 🏆 Leaderboard</a> <a href="#" onclick="showPage('help')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors"> ❓ Bantuan</a> <a href="#" onclick="showPage('login')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors"> 🔑 Masuk</a> <a href="#" onclick="showPage('register')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors"> 📝 Daftar</a> </nav>
+<div class="mt-8 space-y-3"><button onclick="showPage('login')" class="w-full btn btn-secondary">Masuk</button> <button onclick="showPage('register')" 
+class="w-full btn btn-primary">Daftar Sekarang</button>
+</div>
+</div>
+</div><div id="mobile-menu-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"></div>
+</nav><div id="home-page" class="page"><section class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden pt-20"><div class="absolute inset-0 overflow-hidden">
+<div class="absolute -top-40 -right-40 w-80 h-80 bg-white opacity-10 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white opacity-10 rounded-full blur-3xl"></div>
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
+</div>
+<div class="relative z-10 text-center container-responsive"><div class="mb-12">
+<h1 id="quiz-title" class="text-hero text-white mb-6 fade-in">Kuis Pengetahuan Umum</h1>
+<p id="welcome-message" 
+class="text-subtitle text-white opacity-90 mb-8 slide-up max-w-3xl mx-auto">Uji pengetahuan Anda dengan pertanyaan menarik dan raih skor tertinggi!</p><div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-12 scale-in max-w-2xl mx-auto">
+<div class="glass rounded-2xl p-4 sm:p-6 text-center hover-lift">
+<div class="text-2xl sm:text-3xl font-bold text-white mb-2">
+5
+</div>
+<div class="text-white opacity-80 text-sm">
+Pertanyaan
+</div>
+</div>
+<div class="glass rounded-2xl p-4 sm:p-6 text-center hover-lift">
+<div class="text-2xl sm:text-3xl font-bold text-white mb-2">
+⭐
+</div>
+<div class="text-white opacity-80 text-sm">
+Skor Tinggi
+</div>
+</div>
+<div class="glass rounded-2xl p-4 sm:p-6 text-center hover-lift">
+<div class="text-2xl sm:text-3xl font-bold text-white mb-2">
+🏆
+</div>
+<div class="text-white opacity-80 text-sm">
+Prestasi
+</div>
+</div>
+</div>
+</div><button onclick="showPage('quiz')" class="btn btn-primary text-lg px-8 sm:px-12 py-4 hover-lift"> <span class="mr-3"> 🚀 </span> Mulai Kuis Sekarang </button>
+</div>
+</section><section class="py-16 sm:py-24 bg-gray-50">
+<div class="container-responsive">
+<div class="text-center mb-16">
+<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Mengapa Memilih Kuis-in?</h2>
+<p class="text-lg text-gray-600 max-w-2xl mx-auto">Platform kuis terdepan dengan fitur-fitur canggih untuk pengalaman belajar yang optimal</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="card p-8 text-center hover-lift">
+<div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6"><span class="text-3xl"> ⚡ </span>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-4">Cepat &amp;
+Responsif</h3>
+<p class="text-gray-600">Interface yang smooth dan loading yang cepat untuk pengalaman terbaik</p>
+</div>
+<div class="card p-8 text-center hover-lift">
+<div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-6"><span class="text-3xl"> 📊 </span>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-4">Analytics Real-time</h3>
+<p class="text-gray-600">Pantau progress dan performa Anda dengan statistik yang detail</p>
+</div>
+<div class="card p-8 text-center hover-lift">
+<div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6"><span class="text-3xl"> 🎯 </span>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-4">Personalisasi</h3>
+<p class="text-gray-600">Kuis yang disesuaikan dengan level dan minat Anda</p>
+</div>
+</div>
+</div>
+</section>
+</div><div id="quiz-page" class="page hidden">
+<div class="pt-20 
+min-h-screen bg-gray-50">
+<div class="container-responsive py-8"><div class="max-w-4xl mx-auto"><div id="category-screen" class="card card-floating p-6 sm:p-8">
+<div class="text-center mb-8">
+<div class="w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl flex items-center justify-center mx-auto mb-6 hover-lift"><span class="text-2xl sm:text-3xl"> 🎯 </span>
+</div>
+<h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Pilih Kategori Kuis</h2>
+<p class="text-gray-600 text-base sm:text-lg">Pilih topik yang ingin Anda uji</p>
+</div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8">
+<div class="category-card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl cursor-pointer hover-lift border-2 border-transparent hover:border-blue-300 transition-all duration-300" onclick="selectCategory('general')">
+<div class="flex items-center mb-4">
+<div class="text-3xl mr-4">
+🌍
+</div>
+<div>
+<h3 class="font-bold text-blue-900 
+text-lg">Pengetahuan Umum</h3>
+<p class="text-blue-700 text-sm">Tes wawasan umum Anda</p>
+</div>
+</div>
+<div class="flex justify-between items-center text-sm"><span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full font-medium">Mudah</span> <span class="text-blue-600 font-medium"> ⏱ ️ 30 detik/soal</span>
+</div>
+</div>
+<div class="category-card bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl cursor-pointer hover-lift border-2 border-transparent hover:border-green-300 transition-all duration-300" onclick="selectCategory('science')">
+<div class="flex items-center mb-4">
+<div class="text-3xl mr-4">
+🔬
+</div>
+<div>
+<h3 class="font-bold text-green-900 text-lg">Sains &amp;
+Teknologi</h3>
+<p class="text-green-700 text-sm">Uji pengetahuan sains Anda</p>
+</div>
+</div>
+<div class="flex justify-between items-center text-sm"><span class="bg-green-200 text-green-800 px-3 py-1 rounded-full font-medium">Sedang</span> <span class="text-green-600 font-medium"> ⏱ ️ 45 detik/soal</span>
+</div>
+</div>
+<div class="category-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl cursor-pointer hover-lift border-2 border-transparent hover:border-purple-300 transition-all duration-300" onclick="selectCategory('history')">
+<div class="flex items-center mb-4">
+<div class="text-3xl mr-4">
+📚
+</div>
+<div>
+<h3 class="font-bold text-purple-900 text-lg">Sejarah</h3>
+<p class="text-purple-700 text-sm">Jelajahi peristiwa bersejarah</p>
+</div>
+</div>
+<div class="flex justify-between items-center text-sm"><span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full font-medium">Sedang</span> <span class="text-purple-600 font-medium"> ⏱ ️ 40 detik/soal</span>
+</div>
+</div>
+<div class="category-card bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl cursor-pointer hover-lift border-2 border-transparent hover:border-orange-300 transition-all duration-300" onclick="selectCategory('sports')"> 
+<div class="flex items-center mb-4">
+<div class="text-3xl mr-4">
+⚽
+</div>
+<div>
+<h3 class="font-bold text-orange-900 text-lg">Olahraga</h3>
+<p class="text-orange-700 text-sm">Tes pengetahuan olahraga Anda</p>
+</div>
+</div>
+<div class="flex justify-between items-center text-sm"><span class="bg-orange-200 text-orange-800 px-3 py-1 rounded-full font-medium">Mudah</span> <span class="text-orange-600 font-medium"> ⏱ ️ 25 detik/soal</span>
+</div>
+</div>
+</div><div class="bg-gray-50 rounded-2xl p-6 text-center">
+<div class="grid grid-cols-3 gap-4">
+<div>
+<div class="text-2xl font-bold text-gray-800">
+5
+</div>
+<div class="text-sm text-gray-600">
+Pertanyaan
+</div>
+</div>
+<div>
+<div class="text-2xl font-bold text-gray-800">
+⭐
+</div>
+<div class="text-sm text-gray-600">
+Skor Maksimal
+</div>
+</div>
+<div>
+<div class="text-2xl font-bold text-gray-800">
+🏆
+</div>
+<div class="text-sm text-gray-600">
+Leaderboard
+</div>
+</div>
+</div>
+</div>
+</div><div id="welcome-screen" class="hidden card card-floating p-6 sm:p-12 text-center">
+<div class="mb-8">
+<div class="w-20 sm:w-24 h-20 sm:h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl flex items-center justify-center mx-auto mb-6 hover-lift"><span id="category-icon" class="text-3xl sm:text-4xl"> 🧠 </span>
+</div>
+<h2 id="category-name" class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Siap untuk tantangan?</h2>
+<p id="category-description" class="text-gray-600 mb-6 text-base sm:text-lg">Jawab semua pertanyaan dan lihat seberapa baik pengetahuan Anda!</p><div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+<div>
+<div class="text-2xl font-bold text-blue-600">
+5
+</div>
+<div class="text-sm text-gray-600">
+Pertanyaan
+</div>
+</div>
+<div>
+<div id="time-limit" class="text-2xl font-bold text-green-600">
+30s
+</div>
+<div class="text-sm text-gray-600">
+Per Soal
+</div>
+</div>
+<div> 
+<div id="difficulty-level" class="text-2xl font-bold text-purple-600">
+Mudah
+</div>
+<div class="text-sm text-gray-600">
+Tingkat
+</div>
+</div>
+</div>
+</div><div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+<div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-2xl hover-lift">
+<div class="text-2xl sm:text-3xl mb-3">
+⏱ ️
+</div>
+<div class="font-semibold text-blue-900 mb-2 text-sm sm:text-base">
+Timer Countdown
+</div>
+<div class="text-xs sm:text-sm text-blue-700">
+Waktu terbatas untuk setiap soal
+</div>
+</div>
+<div class="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-2xl hover-lift">
+<div class="text-2xl sm:text-3xl mb-3">
+💡
+</div>
+<div class="font-semibold text-green-900 mb-2 text-sm sm:text-base">
+Penjelasan
+</div>
+<div class="text-xs sm:text-sm text-green-700">
+Dapatkan penjelasan untuk setiap jawaban
+</div>
+</div>
+<div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-6 rounded-2xl 
+hover-lift">
+<div class="text-2xl sm:text-3xl mb-3">
+📊
+</div>
+<div class="font-semibold text-purple-900 mb-2 text-sm sm:text-base">
+Statistik
+</div>
+<div class="text-xs sm:text-sm text-purple-700">
+Lihat performa kuis Anda
+</div>
+</div>
+</div>
+<button id="start-quiz-btn" class="btn btn-primary text-lg px-8 sm:px-12 py-4 bounce-in" onclick="startQuiz()">
+<span class="mr-3"> 🔥 </span> Mulai Kuis Sekarang
+</button>
+<button class="mt-4 btn btn-ghost text-gray-600 hover:text-gray-900" onclick="showQuizScreen('category-screen')">
+<span class="mr-2"> 🔙 </span> Pilih Kategori Lain
+</button>
+</div><div id="quiz-screen" class="hidden card card-floating p-6 sm:p-8">
+<div class="flex justify-between items-center mb-6">
+<div id="question-number" class="text-lg font-bold text-gray-900">
+Pertanyaan 1/5
+</div>
+<div class="flex items-center space-x-2">
+<span id="category-badge" class="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">Pengetahuan Umum</span>
+<div id="timer-display" class="w-12 h-8 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-600 transition-all duration-500">
+30s
+</div>
+</div>
+</div><div class="progress-container mb-6">
+<div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+</div><h3 id="question-text" class="text-xl sm:text-2xl font-bold text-gray-900 mb-8">
+Loading pertanyaan...
+</h3><div id="options-container" class="space-y-4 mb-8">
+<div class="card card-question p-4 sm:p-5 flex items-center space-x-4">
+<div class="w-8 h-8 flex-shrink-0 bg-gray-200 text-gray-700 rounded-full flex items-center justify-center font-bold text-sm">A</div>
+<span class="text-base text-gray-700">Opsi Jawaban A</span>
+</div>
+</div><div class="flex justify-between items-center flex-wrap gap-4">
+<button id="submit-answer-btn" class="btn btn-primary px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+Submit Jawaban
+</button>
+<div id="explanation-container" class="hidden w-full mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-lg">
+<p class="font-bold text-yellow-800 mb-1">Penjelasan:</p>
+<p id="explanation-text" class="text-sm text-yellow-700">
+</p>
+</div>
+</div>
+</div><div id="result-screen" class="hidden card card-floating p-6 sm:p-12 text-center scale-in">
+<div id="result-icon" class="text-6xl mb-4">
+🥳
+</div>
+<h2 id="result-title" class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+Selamat!
+</h2>
+<p id="result-message" class="text-lg text-gray-600 mb-8">
+Anda telah menyelesaikan kuis. Lihat hasil Anda di bawah ini:
+</p>
+<div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-8">
+<div class="grid grid-cols-2 gap-4 text-center">
+<div>
+<div id="final-score" class="text-4xl font-bold text-green-600 mb-1">
+5/5
+</div>
+<div class="text-sm text-gray-600">
+Jawaban Benar
+</div>
+</div>
+<div>
+<div id="time-taken" class="text-4xl font-bold text-blue-600 mb-1">
+120s
+</div>
+<div class="text-sm text-gray-600">
+Waktu Total
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<button class="w-full btn btn-primary text-lg" onclick="showReviewScreen()">
+<span class="mr-2"> 🔍 </span> Tinjau Jawaban
+</button>
+<button class="w-full btn btn-secondary text-lg" onclick="showQuizScreen('category-screen')">
+<span class="mr-2"> 🔄 </span> Coba Kuis Lain
+</button>
+<button class="w-full btn btn-ghost text-gray-600" onclick="showPage('leaderboard')">
+<span class="mr-2"> 🏆 </span> Lihat Leaderboard
+</button>
+</div>
+</div><div id="review-screen" class="hidden card card-floating p-6 sm:p-8">
+<h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Tinjauan Jawaban</h2>
+<div id="review-questions" class="space-y-6">
+<div class="card p-6 border-l-4 border-green-500 bg-green-50">
+<p class="font-bold text-gray-900 mb-2">1. Pertanyaan akan muncul di sini</p>
+<p class="text-sm text-green-700">Jawaban Benar: Opsi A</p>
+<div class="p-3 bg-white rounded-lg mt-3">
+<h4 class="font-bold text-gray-900 mb-1">Penjelasan:</h4>
+<p class="text-sm text-gray-700">Penjelasan akan muncul di sini.</p>
+</div>
+</div>
+</div>
+<button class="mt-8 w-full btn btn-secondary text-lg" onclick="showQuizScreen('result-screen')">
+<span class="mr-2"> 🔙 </span> Kembali ke Hasil
+</button>
+</div><div id="loading-state" class="hidden p-12 text-center">
+<div class="loading-spinner mx-auto mb-4"></div>
+<p class="text-lg font-semibold text-gray-700">Memuat pertanyaan...</p>
+</div>
+</div>
+</div>
+</div><div id="leaderboard-page" class="page hidden pt-20 min-h-screen bg-gray-50">
+<div class="container-responsive py-8">
+<div class="max-w-3xl mx-auto">
+<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-8 text-center">🏆 Leaderboard Kuis</h2>
+<div class="card p-4 sm:p-6 space-y-3">
+<div class="leaderboard-item flex items-center justify-between p-3 rounded-xl border-b border-gray-100 hover:bg-gray-50">
+<div class="flex items-center space-x-4">
+<div class="rank-badge rank-1">1</div>
+<div>
+<p class="font-bold text-gray-900">Budi Santoso</p>
+<p class="text-sm text-gray-500">Pengetahuan Umum</p>
+</div>
+</div>
+<div class="text-lg font-bold text-green-600">
+4800 Poin
+</div>
+</div>
+<div class="leaderboard-item flex items-center justify-between p-3 rounded-xl border-b border-gray-100 hover:bg-gray-50">
+<div class="flex items-center space-x-4">
+<div class="rank-badge rank-2">2</div>
+<div>
+<p class="font-bold text-gray-900">Siti Aisyah</p>
+<p class="text-sm text-gray-500">Sains &amp; Teknologi</p>
+</div>
+</div>
+<div class="text-lg font-bold text-blue-600">
+4550 Poin
+</div>
+</div>
+<div class="leaderboard-item flex items-center justify-between p-3 rounded-xl border-b border-gray-100 hover:bg-gray-50">
+<div class="flex items-center space-x-4">
+<div class="rank-badge rank-3">3</div>
+<div>
+<p class="font-bold text-gray-900">Joko Susilo</p>
+<p class="text-sm text-gray-500">Sejarah</p>
+</div>
+</div>
+<div class="text-lg font-bold text-purple-600">
+4100 Poin
+</div>
+</div>
+<div class="leaderboard-item flex items-center justify-between p-3 rounded-xl border-b border-gray-100">
+<div class="flex items-center space-x-4">
+<div class="rank-badge rank-other bg-gray-400">4</div>
+<div>
+<p class="font-bold text-gray-900">Rina Dewi</p>
+<p class="text-sm text-gray-500">Olahraga</p>
+</div>
+</div>
+<div class="text-lg font-bold text-gray-700">
+3900 Poin
+</div>
+</div>
+<div class="leaderboard-item flex items-center justify-between p-3 rounded-xl border-b border-gray-100">
+<div class="flex items-center space-x-4">
+<div class="rank-badge rank-other bg-gray-400">5</div>
+<div>
+<p class="font-bold text-gray-900">Agus Wijaya</p>
+<p class="text-sm text-gray-500">Pengetahuan Umum</p>
+</div>
+</div>
+<div class="text-lg font-bold text-gray-700">
+3850 Poin
+</div>
+</div>
+<div class="leaderboard-item flex items-center justify-between p-3 rounded-xl border-b border-gray-100">
+<div class="flex items-center space-x-4">
+<div class="rank-badge rank-other bg-gray-400">...</div>
+<div>
+<p class="font-bold text-gray-900">Anda</p>
+<p class="text-sm text-gray-500">Skor Anda saat ini</p>
+</div>
+</div>
+<div class="text-lg font-bold text-blue-500">
+1250 Poin
+</div>
+</div>
+</div>
+<p class="text-center text-sm text-gray-500 mt-6">Skor diperbarui setiap 1 jam. Dapatkan skor tertinggi untuk naik peringkat!</p>
+</div>
+</div>
+</div><div id="help-page" class="page hidden pt-20 min-h-screen bg-gray-50">
+<div class="container-responsive py-8">
+<div class="max-w-4xl mx-auto">
+<div class="text-center mb-12">
+<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Pusat Bantuan (FAQ)</h2>
+<p class="text-lg text-gray-600">Temukan jawaban atas pertanyaan umum Anda</p>
+</div>
+<div class="card p-0">
+<div class="faq-item" onclick="toggleFaq(this)">
+<div class="faq-question">
+<h3 class="text-lg font-semibold text-gray-800 flex-grow">Bagaimana cara memulai kuis?</h3>
+<svg class="w-5 h-5 ml-4 flex-shrink-0 faq-icon text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+</svg>
+</div>
+<div class="faq-answer hidden">
+<p>
+Anda dapat memulai kuis dari halaman Beranda atau halaman Kuis. Di halaman Kuis, pilih kategori yang Anda inginkan (misalnya, Pengetahuan Umum) dan klik tombol "Mulai Kuis Sekarang". Anda akan langsung dibawa ke pertanyaan pertama.
+</p>
+</div>
+</div>
+<div class="faq-item" onclick="toggleFaq(this)">
+<div class="faq-question">
+<h3 class="text-lg font-semibold text-gray-800 flex-grow">Apakah ada batas waktu untuk setiap pertanyaan?</h3>
+<svg class="w-5 h-5 ml-4 flex-shrink-0 faq-icon text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+</svg>
+</div>
+<div class="faq-answer hidden">
+<p>
+Ya, setiap kategori kuis memiliki batas waktu yang berbeda untuk setiap pertanyaan (misalnya, 30 detik untuk Pengetahuan Umum, 45 detik untuk Sains). Jika waktu habis sebelum Anda menjawab, jawaban Anda akan dianggap salah.
+</p>
+</div>
+</div>
+<div class="faq-item" onclick="toggleFaq(this)">
+<div class="faq-question">
+<h3 class="text-lg font-semibold text-gray-800 flex-grow">Bagaimana cara menghitung skor?</h3>
+<svg class="w-5 h-5 ml-4 flex-shrink-0 faq-icon text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+</svg>
+</div>
+<div class="faq-answer hidden">
+<p>
+Skor dihitung berdasarkan jawaban yang benar dan bonus waktu yang tersisa. Semakin cepat Anda menjawab dengan benar, semakin tinggi skor yang Anda dapatkan untuk pertanyaan tersebut.
+</p>
+</div>
+</div>
+<div class="faq-item" onclick="toggleFaq(this)">
+<div class="faq-question">
+<h3 class="text-lg font-semibold text-gray-800 flex-grow">Apakah saya bisa meninjau jawaban saya?</h3>
+<svg class="w-5 h-5 ml-4 flex-shrink-0 faq-icon text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+</svg>
+</div>
+<div class="faq-answer hidden">
+<p>
+Tentu saja! Setelah menyelesaikan kuis, di layar hasil, Anda akan menemukan tombol "Tinjau Jawaban" yang akan menampilkan semua pertanyaan, jawaban yang benar, dan penjelasannya.
+</p>
+</div>
+</div>
+<div class="faq-item" onclick="toggleFaq(this)">
+<div class="faq-question">
+<h3 class="text-lg font-semibold text-gray-800 flex-grow">Apakah ada fitur Leaderboard?</h3>
+<svg class="w-5 h-5 ml-4 flex-shrink-0 faq-icon text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+</svg>
+</div>
+<div class="faq-answer hidden">
+<p>
+Ada. Anda bisa melihat peringkat Anda dibandingkan dengan pengguna lain di halaman Leaderboard. Skor tertinggi akan menempati posisi teratas.
+</p>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center">
+<p class="text-lg font-semibold text-gray-800 mb-4">Tidak menemukan jawaban Anda?</p>
+<button class="btn btn-primary px-8 py-3">
+<span class="mr-2"> ✉️ </span> Hubungi Dukungan
+</button>
+</div>
+</div>
+</div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
